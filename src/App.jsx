@@ -2,6 +2,7 @@ import s from "./style.module.css";
 import { TVShowAPI } from "./api/tv-show";
 import { useState, useEffect } from "react";
 import { BACKDROP_BASE_URL } from "./config";
+import { TVShowDetails } from "./components/TVShowDetails/TVShowDetails";
 
 export function App() {
   const [currentTVShow, setCurrentTVShow] = useState();
@@ -35,7 +36,9 @@ export function App() {
           </div>
         </div>
       </div>
-      <div className={s.tv_show_detail}>TV show details</div>
+      <div className={s.tv_show_detail}>
+        {currentTVShow && <TVShowDetails tvShow={currentTVShow} />}
+      </div>
       <div className={s.recommended_tv_shows}>Recommended TV shows</div>
     </div>
   );
