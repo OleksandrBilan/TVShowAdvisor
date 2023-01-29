@@ -5,7 +5,6 @@ import { BACKDROP_BASE_URL } from "./config";
 import { TVShowDetails } from "./components/TVShowDetails/TVShowDetails";
 import { Logo } from "./components/Logo/Logo";
 import logoImage from "./assets/images/logo.png";
-import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
 import { TVShowList } from "./components/TVShowList/TVShowList";
 
 export function App() {
@@ -25,6 +24,10 @@ export function App() {
     if (recommendations.length > 0) {
       setRecommendationsList(recommendations.slice(0, 10));
     }
+  }
+
+  function updateCurrentTVShow(tvShow) {
+    setCurrentTVShow(tvShow);
   }
 
   useEffect(() => {
@@ -61,7 +64,12 @@ export function App() {
         {currentTVShow && <TVShowDetails tvShow={currentTVShow} />}
       </div>
       <div className={s.recommended_tv_shows}>
-        {recommendationsList && <TVShowList tvShows={recommendationsList} />}
+        {recommendationsList && (
+          <TVShowList
+            tvShows={recommendationsList}
+            onItemClick={updateCurrentTVShow}
+          />
+        )}
       </div>
     </div>
   );

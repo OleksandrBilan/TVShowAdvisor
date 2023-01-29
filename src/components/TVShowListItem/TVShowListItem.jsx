@@ -1,7 +1,7 @@
 import s from "./style.module.css";
 import { SMALL_IMAGE_COVER_BASE_URL } from "../../config";
 
-const MAX_TITLE_LENGTH = 40;
+const MAX_TITLE_LENGTH = 33;
 
 export function TVShowListItem({ tvShow, onClick }) {
   function onClick_() {
