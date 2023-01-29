@@ -5,9 +5,12 @@ import { BACKDROP_BASE_URL } from "./config";
 import { TVShowDetails } from "./components/TVShowDetails/TVShowDetails";
 import { Logo } from "./components/Logo/Logo";
 import logoImage from "./assets/images/logo.png";
+import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
+import { TVShowList } from "./components/TVShowList/TVShowList";
 
 export function App() {
   const [currentTVShow, setCurrentTVShow] = useState();
+  const [recommendationsList, setRecommendationsList] = useState([]);
 
   async function fetchPopularTVShows() {
     const popularTVShows = await TVShowAPI.fetchPopulars();
@@ -17,9 +20,22 @@ export function App() {
     }
   }
 
+  async function fetchRecommendations(tvShowId) {
+    const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
+    if (recommendations.length > 0) {
+      setRecommendationsList(recommendations.slice(0, 10));
+    }
+  }
+
   useEffect(() => {
     fetchPopularTVShows();
   }, []);
+
+  useEffect(() => {
+    if (currentTVShow) {
+      fetchRecommendations(currentTVShow.id);
+    }
+  }, [currentTVShow]);
 
   const backgroundImage = currentTVShow
     ? `linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("${BACKDROP_BASE_URL}${currentTVShow.backdrop_path}") no-repeat center / cover`
@@ -44,7 +60,9 @@ export function App() {
       <div className={s.tv_show_detail}>
         {currentTVShow && <TVShowDetails tvShow={currentTVShow} />}
       </div>
-      <div className={s.recommended_tv_shows}>Recommended TV shows</div>
+      <div className={s.recommended_tv_shows}>
+        {recommendationsList && <TVShowList tvShows={recommendationsList} />}
+      </div>
     </div>
   );
 }
