@@ -6,23 +6,43 @@ import { TVShowDetails } from "./components/TVShowDetails/TVShowDetails";
 import { Logo } from "./components/Logo/Logo";
 import logoImage from "./assets/images/logo.png";
 import { TVShowList } from "./components/TVShowList/TVShowList";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 
 export function App() {
   const [currentTVShow, setCurrentTVShow] = useState();
   const [recommendationsList, setRecommendationsList] = useState([]);
 
   async function fetchPopularTVShows() {
-    const popularTVShows = await TVShowAPI.fetchPopulars();
+    try {
+      const popularTVShows = await TVShowAPI.fetchPopulars();
 
-    if (popularTVShows.length > 0) {
-      setCurrentTVShow(popularTVShows[0]);
+      if (popularTVShows.length > 0) {
+        setCurrentTVShow(popularTVShows[0]);
+      }
+    } catch (error) {
+      alert("The error occured while loading the popular TV shows :(");
     }
   }
 
   async function fetchRecommendations(tvShowId) {
-    const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
-    if (recommendations.length > 0) {
-      setRecommendationsList(recommendations.slice(0, 10));
+    try {
+      const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
+      if (recommendations.length > 0) {
+        setRecommendationsList(recommendations.slice(0, 10));
+      }
+    } catch (error) {
+      alert("The error occured while loading the recommendations :(");
+    }
+  }
+
+  async function fetchByTitle(title) {
+    try {
+      const searchResponse = await TVShowAPI.fetchByTitle(title);
+      if (searchResponse.length > 0) {
+        setCurrentTVShow(searchResponse[0]);
+      }
+    } catch (error) {
+      alert("The error occured while searching the TV show :(");
     }
   }
 
@@ -56,7 +76,7 @@ export function App() {
             />
           </div>
           <div className="col-md-12 col-lg-4">
-            <input style={{ width: "100%" }} type="text" />
+            <SearchBar onSubmit={fetchByTitle} />
           </div>
         </div>
       </div>
